@@ -5,6 +5,7 @@ import {
 } from 'native-base';
 import PhoneInput from 'react-native-phone-input'
 import ModalPickerImage from './ModalPickerImage';
+import SplashScreen from 'react-native-splash-screen';
 
 const {width} = Dimensions.get('window');
 export default class App extends Component {
@@ -12,7 +13,8 @@ export default class App extends Component {
     componentDidMount() {
         this.setState({
             pickerData: this.phone.getPickerData()
-        })
+        });
+        SplashScreen.hide();
     }
 
     onPressFlag() {
@@ -47,10 +49,10 @@ export default class App extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Text style={styles.welcome}>Whats Cut!</Text>
                 <Card style={styles.cardStyle}>
                     <CardItem style={styles.cardStyle}>
                         <Body>
-                        <Text style={styles.welcome}>Whats Cut!</Text>
                         <View style={styles.formNumber}>
                             <PhoneInput
                                 initialCountry={`id`}
@@ -64,7 +66,7 @@ export default class App extends Component {
                         </View>
                         <Form
                             style={styles.formStyle}>
-                            <Label>Alamat</Label>
+                            <Label style={{color: '#fff'}}>Alamat</Label>
                             <Textarea
                                 rowSpan={5}
                                 value={this.state.message}
@@ -97,19 +99,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#90CAF9',
+        backgroundColor: '#fff',
     },
     welcome: {
         fontSize: 20,
         alignSelf: 'center',
         margin: 10,
-        color: '#fff'
+        color: '#D93D3C'
     },
     cardStyle: {
         borderRadius: 8,
         width: (width) - 20,
-        backgroundColor: '#1E88E5',
-        borderColor: '#1E88E5',
+        backgroundColor: '#D93D3C',
+        borderColor: '#D93D3C',
     },
     formStyle: {
         alignSelf: 'center',
@@ -119,6 +121,5 @@ const styles = StyleSheet.create({
     formNumber: {
         alignSelf: 'center',
         width: '90%',
-        color: '#fff'
     }
 });
