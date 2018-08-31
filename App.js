@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Dimensions, TouchableOpacity, Linking, Image} from 'react-native';
+import {StyleSheet, View, Dimensions, TouchableOpacity, Linking, Image, Alert} from 'react-native';
 import {
     Card, CardItem, Body, Text, Textarea, Form, Label, Icon, Button
 } from 'native-base';
@@ -7,7 +7,7 @@ import PhoneInput from 'react-native-phone-input';
 import ModalPickerImage from './ModalPickerImage';
 import SplashScreen from 'react-native-splash-screen';
 import Modal from 'react-native-modal';
-import {urlReport, appVersion} from './config';
+import {urlReport, appVersion, whatsappApi} from './config';
 
 const {width} = Dimensions.get('window');
 
@@ -52,10 +52,11 @@ export default class App extends Component {
     };
 
     sendMessage = () => {
-        console.log('send message!');
         const {message, notelp} = this.state;
         const dataMessage = encodeURI(message);
-        console.log('isi data message: ', dataMessage);
+        const no = notelp.substr(1);
+        
+        Linking.openURL(`${whatsappApi}${no}/?text=${dataMessage}`);
     };
 
     openMenu = () => {
@@ -99,7 +100,7 @@ export default class App extends Component {
                                 />
                             </Form>
                             <TouchableOpacity
-                                onPress={() => this.sendMessage}
+                                onPress={this.sendMessage}
                                 style={styles.viewButtonStyle}>
                                 <View style={styles.buttonStyle}>
                                     <Icon style={{color: '#e8f5e9'}} name='send' type={`MaterialIcons`}/>
