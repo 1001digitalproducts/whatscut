@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Dimensions, TouchableOpacity, Linking, Image, Alert} from 'react-native';
+import {StyleSheet, View, Dimensions, TouchableOpacity, Linking, Image} from 'react-native';
 import {
     Card, CardItem, Body, Text, Textarea, Form, Label, Icon, Button
 } from 'native-base';
