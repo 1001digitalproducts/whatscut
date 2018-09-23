@@ -1,4 +1,4 @@
-import Expo from 'expo';
+import Expo, { LinearGradient } from 'expo';
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -78,7 +78,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor={colors.headerBackground} barStyle="dark-content" />
+        <StatusBar backgroundColor={colors.darkWhite} barStyle="dark-content" />
         <View style={styles.header}>
           <TouchableOpacity onPress={this.openMenu}>
             <Icon
@@ -91,35 +91,38 @@ export default class App extends Component {
         <View style={styles.container}>
           <Image source={require(`../assets/logo.png`)} style={styles.logo} />
           <Card style={styles.cardStyle}>
-            <CardItem style={styles.cardStyle}>
-              <Body>
-                <View style={styles.formNumber}>
-                  <PhoneInput
-                    initialCountry={`id`}
-                    ref={ref => {
-                      this.phone = ref;
-                    }}
-                    onChangePhoneNumber={this.changePhoneNumber}
-                    value={this.state.notelp}
-                  />
-                </View>
-                <Form style={styles.formStyle}>
-                  <Label style={{ color: '#fff' }}>Alamat</Label>
-                  <Textarea
-                    rowSpan={5}
-                    value={this.state.message}
-                    onChangeText={this.changeMessage}
-                    placeholder="Isi pesan"
-                  />
-                </Form>
-                <TouchableOpacity onPress={this.sendMessage} style={styles.viewButtonStyle}>
-                  <View style={styles.buttonStyle}>
-                    <Icon style={{ color: '#e8f5e9' }} name="send" type={`MaterialIcons`} />
-                  </View>
-                </TouchableOpacity>
-              </Body>
-            </CardItem>
+            <View style={styles.formNumber}>
+              <PhoneInput
+                initialCountry={`id`}
+                ref={ref => {
+                  this.phone = ref;
+                }}
+                onChangePhoneNumber={this.changePhoneNumber}
+                value={this.state.notelp}
+              />
+            </View>
           </Card>
+          <Card style={styles.cardStyle}>
+            <Form style={styles.formStyle}>
+              <Label style={{ color: '#fff' }}>Alamat</Label>
+              <Textarea
+                rowSpan={5}
+                value={this.state.message}
+                onChangeText={this.changeMessage}
+                placeholder="Write a message..."
+              />
+            </Form>
+          </Card>
+
+          <TouchableOpacity onPress={this.sendMessage}>
+            <LinearGradient
+              start={{ x: 1, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              colors={[colors.yellow, colors.green]}
+              style={styles.buttonStyle}>
+              <Text style={styles.buttonText}>Send</Text>
+            </LinearGradient>
+          </TouchableOpacity>
 
           <ModalPickerImage
             ref={ref => {
@@ -218,50 +221,47 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.backgroundColor,
+    backgroundColor: colors.white,
   },
   cardStyle: {
-    borderRadius: 8,
-    width: width - 20,
-    backgroundColor: '#338a3e',
-    borderColor: '#338a3e',
+    marginBottom: 15,
+    borderRadius: 10,
+    width: width - 80,
+    backgroundColor: colors.white,
   },
   formStyle: {
     alignSelf: 'center',
     width: '90%',
     marginBottom: 5,
-    backgroundColor: '#66bb6a',
+    backgroundColor: colors.white,
     borderRadius: 4,
-    margin: 6,
-    padding: 5,
+    height: 200,
     opacity: 0.75,
   },
   formNumber: {
     alignSelf: 'center',
     width: '90%',
-    marginBottom: 5,
-    marginTop: 10,
-    backgroundColor: '#66bb6a',
+    marginVertical: 10,
+    backgroundColor: colors.white,
     borderRadius: 4,
     height: 30,
     padding: 5,
     opacity: 0.75,
   },
   buttonStyle: {
-    backgroundColor: '#66bb6a',
-    borderRadius: 50,
-    height: 50,
-    width: 50,
+    marginVertical: 5,
+    paddingVertical: 10,
+    borderRadius: 10,
+    width: width - 80,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  viewButtonStyle: {
     alignSelf: 'center',
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    width: '90%',
-    padding: 1,
+  },
+  buttonText: {
+    color: colors.white,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   //MODAL STYLE
   contentModal: {
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 140,
     resizeMode: 'stretch',
-    marginBottom: 25,
+    marginBottom: 50,
   },
   iconAbout: {
     height: 110,
