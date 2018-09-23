@@ -1,11 +1,20 @@
 import Expo from 'expo';
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, TouchableOpacity, Linking, Image } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Linking,
+  Image,
+  StatusBar,
+} from 'react-native';
 import { Card, CardItem, Body, Text, Textarea, Form, Label, Icon, Button } from 'native-base';
 import PhoneInput from 'react-native-phone-input';
 import ModalPickerImage from '@components/ModalPickerImage';
 import Modal from 'react-native-modal';
 import { urlReport, appVersion, whatsappApi } from '@constants/config';
+import colors from '@constants/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -13,6 +22,7 @@ export default class App extends Component {
   componentDidMount() {
     Expo.Font.loadAsync({
       'Roboto-Medium': require('../assets/fonts/Roboto/Roboto-Medium.ttf'),
+      Roboto_medium: require('../assets/fonts/Roboto/Roboto-Medium.ttf'),
       'Roboto-Bold': require('../assets/fonts/Roboto/Roboto-Bold.ttf'),
     });
     this.setState({
@@ -68,6 +78,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor={colors.headerBackground} barStyle="dark-content" />
         <View style={styles.header}>
           <TouchableOpacity onPress={this.openMenu}>
             <Icon
@@ -77,9 +88,8 @@ export default class App extends Component {
             />
           </TouchableOpacity>
         </View>
-
         <View style={styles.container}>
-          <Text style={styles.welcome}>WhatsCut!</Text>
+          <Image source={require(`../assets/logo.png`)} style={styles.logo} />
           <Card style={styles.cardStyle}>
             <CardItem style={styles.cardStyle}>
               <Body>
@@ -133,9 +143,7 @@ export default class App extends Component {
                 rounded
                 style={styles.btnReport}
                 onPress={() => {
-                  this.setState({
-                    popMenu: !this.state.popMenu,
-                  });
+                  this.setState({ popMenu: !this.state.popMenu });
                   Linking.openURL(urlReport);
                 }}
                 iconLeft>
@@ -170,7 +178,6 @@ export default class App extends Component {
             </View>
           </View>
         </Modal>
-
         <Modal
           isVisible={this.state.popAbout}
           animationIn={'slideInLeft'}
@@ -203,7 +210,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   header: {
     display: 'flex',
-    backgroundColor: '#E1E2E1',
+    backgroundColor: colors.headerBackground,
     flexDirection: 'row-reverse',
     padding: 10,
   },
@@ -211,13 +218,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E1E2E1',
-  },
-  welcome: {
-    fontSize: 30,
-    margin: 10,
-    color: '#338a3e',
-    fontWeight: 'bold',
+    backgroundColor: colors.backgroundColor,
   },
   cardStyle: {
     borderRadius: 8,
@@ -308,6 +309,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#338a3e',
     fontWeight: 'bold',
+  },
+  logo: {
+    width: 100,
+    height: 140,
+    resizeMode: 'stretch',
+    marginBottom: 25,
   },
   iconAbout: {
     height: 110,
