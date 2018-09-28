@@ -8,13 +8,16 @@ import {
   Linking,
   Image,
   StatusBar,
+  Keyboard,
+  Platform,
 } from 'react-native';
-import { Card, CardItem, Body, Text, Textarea, Form, Label, Icon, Button } from 'native-base';
+import { Card, Text, Textarea, Form, Label, Icon, Button } from 'native-base';
 import PhoneInput from 'react-native-phone-input';
 import ModalPickerImage from '@components/ModalPickerImage';
 import Modal from 'react-native-modal';
 import { urlReport, appVersion, whatsappApi } from '@constants/config';
 import colors from '@constants/colors';
+import DismissKeyboard from '@components/utils/DismissKeyboard';
 
 const { width } = Dimensions.get('window');
 
@@ -46,7 +49,36 @@ export default class App extends Component {
       notelp: '',
       popAbout: false,
       popMenu: false,
+      keyboardUp: false,
     };
+  }
+
+  componentWillMount() {
+    this._keyboardDidShowListener = Keyboard.addListener(
+      Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow',
+      this.keyboardDidShow.bind(this)
+    );
+    this._keyboardDidHideListener = Keyboard.addListener(
+      Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide',
+      this.keyboardDidHide.bind(this)
+    );
+  }
+
+  componentWillUnmount() {
+    this._keyboardDidShowListener.remove();
+    this._keyboardDidHideListener.remove();
+  }
+
+  keyboardDidShow() {
+    this.setState({
+      keyboardUp: true,
+    });
+  }
+
+  keyboardDidHide() {
+    this.setState({
+      keyboardUp: false,
+    });
   }
 
   changePhoneNumber = notelp => {
@@ -77,101 +109,127 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor={colors.darkWhite} barStyle="dark-content" />
-        <View style={styles.header}>
-          <TouchableOpacity onPress={this.openMenu}>
-            <Icon
-              style={{ color: '#338a3e' }}
-              name="dots-vertical"
-              type={`MaterialCommunityIcons`}
+      <DismissKeyboard>
+        <View style={{ flex: 1 }}>
+          <StatusBar backgroundColor={colors.darkWhite} barStyle="dark-content" />
+          <View style={styles.header}>
+            <TouchableOpacity onPress={this.openMenu}>
+              <Icon
+                style={{ color: '#338a3e' }}
+                name="dots-vertical"
+                type={`MaterialCommunityIcons`}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.container}>
+            <Image source={require(`../assets/logo.png`)} style={styles.logo} />
+            <Card style={styles.cardStyle}>
+              <View style={styles.formNumber}>
+                <PhoneInput
+                  initialCountry={`id`}
+                  ref={ref => {
+                    this.phone = ref;
+                  }}
+                  onChangePhoneNumber={this.changePhoneNumber}
+                  value={this.state.notelp}
+                />
+              </View>
+            </Card>
+            <Card style={styles.cardStyle}>
+              <Form style={styles.formStyle}>
+                <Label style={{ color: '#fff' }}>Alamat</Label>
+                <Textarea
+                  rowSpan={5}
+                  value={this.state.message}
+                  onChangeText={this.changeMessage}
+                  placeholder="Write a message..."
+                />
+              </Form>
+            </Card>
+
+            <TouchableOpacity onPress={this.sendMessage}>
+              <LinearGradient
+                start={{ x: 1, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                colors={[colors.yellow, colors.green]}
+                style={styles.buttonStyle}>
+                <Text style={styles.buttonText}>Send</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <ModalPickerImage
+              ref={ref => {
+                this.myCountryPicker = ref;
+              }}
+              data={this.state.pickerData}
+              onChange={country => {
+                this.selectCountry(country);
+              }}
+              cancelText="Cancel"
             />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <Image source={require(`../assets/logo.png`)} style={styles.logo} />
-          <Card style={styles.cardStyle}>
-            <View style={styles.formNumber}>
-              <PhoneInput
-                initialCountry={`id`}
-                ref={ref => {
-                  this.phone = ref;
-                }}
-                onChangePhoneNumber={this.changePhoneNumber}
-                value={this.state.notelp}
-              />
+          </View>
+          <Modal
+            isVisible={this.state.popMenu}
+            animationIn={'slideInLeft'}
+            animationOut={'slideOutRight'}>
+            <View style={styles.contentModal}>
+              <Text style={styles.itemTitlePop}>Menu</Text>
+              <View style={styles.btnWrapper}>
+                <Button
+                  rounded
+                  style={styles.btnReport}
+                  onPress={() => {
+                    this.setState({ popMenu: !this.state.popMenu });
+                    Linking.openURL(urlReport);
+                  }}
+                  iconLeft>
+                  <Icon type={`MaterialIcons`} active name="report" />
+                  <Text>Kirim kritik / saran</Text>
+                </Button>
+                <Button
+                  rounded
+                  style={styles.btnAbout}
+                  onPress={() => {
+                    this.setState({
+                      popMenu: !this.state.popMenu,
+                      popAbout: !this.state.popAbout,
+                    });
+                  }}
+                  iconLeft>
+                  <Icon type={`MaterialIcons`} active name="info-outline" />
+                  <Text>Tentang Whatscut</Text>
+                </Button>
+                <Button
+                  rounded
+                  style={styles.btnClose}
+                  onPress={() =>
+                    this.setState({
+                      popMenu: !this.state.popMenu,
+                    })
+                  }
+                  iconLeft>
+                  <Icon type={`MaterialIcons`} active name="close" />
+                  <Text>Tutup</Text>
+                </Button>
+              </View>
             </View>
-          </Card>
-          <Card style={styles.cardStyle}>
-            <Form style={styles.formStyle}>
-              <Label style={{ color: '#fff' }}>Alamat</Label>
-              <Textarea
-                rowSpan={5}
-                value={this.state.message}
-                onChangeText={this.changeMessage}
-                placeholder="Write a message..."
-              />
-            </Form>
-          </Card>
-
-          <TouchableOpacity onPress={this.sendMessage}>
-            <LinearGradient
-              start={{ x: 1, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              colors={[colors.yellow, colors.green]}
-              style={styles.buttonStyle}>
-              <Text style={styles.buttonText}>Send</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          <ModalPickerImage
-            ref={ref => {
-              this.myCountryPicker = ref;
-            }}
-            data={this.state.pickerData}
-            onChange={country => {
-              this.selectCountry(country);
-            }}
-            cancelText="Cancel"
-          />
-        </View>
-        <Modal
-          isVisible={this.state.popMenu}
-          animationIn={'slideInLeft'}
-          animationOut={'slideOutRight'}>
-          <View style={styles.contentModal}>
-            <Text style={styles.itemTitlePop}>Menu</Text>
-            <View style={styles.btnWrapper}>
-              <Button
-                rounded
-                style={styles.btnReport}
-                onPress={() => {
-                  this.setState({ popMenu: !this.state.popMenu });
-                  Linking.openURL(urlReport);
-                }}
-                iconLeft>
-                <Icon type={`MaterialIcons`} active name="report" />
-                <Text>Kirim kritik / saran</Text>
-              </Button>
-              <Button
-                rounded
-                style={styles.btnAbout}
-                onPress={() => {
-                  this.setState({
-                    popMenu: !this.state.popMenu,
-                    popAbout: !this.state.popAbout,
-                  });
-                }}
-                iconLeft>
-                <Icon type={`MaterialIcons`} active name="info-outline" />
-                <Text>Tentang Whatscut</Text>
-              </Button>
+          </Modal>
+          <Modal
+            isVisible={this.state.popAbout}
+            animationIn={'slideInLeft'}
+            animationOut={'slideOutRight'}>
+            <View style={styles.contentModal}>
+              <Text style={styles.textTitle}>Tentang</Text>
+              <Image source={require(`../assets/icon.png`)} style={styles.iconAbout} />
+              <Text style={styles.textNameApp}>Whatscut</Text>
+              <Text style={styles.textVersion}>Version {appVersion}</Text>
+              <Text style={styles.textBrand}>1001 Digital Products</Text>
               <Button
                 rounded
                 style={styles.btnClose}
                 onPress={() =>
                   this.setState({
-                    popMenu: !this.state.popMenu,
+                    popAbout: !this.state.popAbout,
                   })
                 }
                 iconLeft>
@@ -179,33 +237,9 @@ export default class App extends Component {
                 <Text>Tutup</Text>
               </Button>
             </View>
-          </View>
-        </Modal>
-        <Modal
-          isVisible={this.state.popAbout}
-          animationIn={'slideInLeft'}
-          animationOut={'slideOutRight'}>
-          <View style={styles.contentModal}>
-            <Text style={styles.textTitle}>Tentang</Text>
-            <Image source={require(`../assets/icon.png`)} style={styles.iconAbout} />
-            <Text style={styles.textNameApp}>Whatscut</Text>
-            <Text style={styles.textVersion}>Version {appVersion}</Text>
-            <Text style={styles.textBrand}>1001 Digital Products</Text>
-            <Button
-              rounded
-              style={styles.btnClose}
-              onPress={() =>
-                this.setState({
-                  popAbout: !this.state.popAbout,
-                })
-              }
-              iconLeft>
-              <Icon type={`MaterialIcons`} active name="close" />
-              <Text>Tutup</Text>
-            </Button>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+        </View>
+      </DismissKeyboard>
     );
   }
 }
