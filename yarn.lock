@@ -5942,13 +5942,6 @@ react-is@^16.5.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
   integrity sha512-hSl7E6l25GTjNEZATqZIuWOgSnpXb3kD0DVCujmg46K5zLxsbiKaaT6VO9slkSBDPZfYs30lwfJwbOFOnoEnKQ==
 
-react-native-animatable@^1.2.4:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.0.tgz#b5c3940fc758cfd9b2fe54613a457c4b6962b46e"
-  integrity sha512-GGYEYvderfzPZcPnw7xov4nlRmi9d6oqcIzx0fGkUUsMshOQEtq5IEzFp3np0uTB9n8/gZIZcdbUPggVlVydMg==
-  dependencies:
-    prop-types "^15.5.10"
-
 react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
@@ -5999,14 +5992,6 @@ react-native-maps@0.21.0:
     babel-plugin-module-resolver "^2.3.0"
     babel-preset-react-native "1.9.0"
 
-react-native-modal@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-6.5.0.tgz#46220b2289a41597d344c1db17454611b426a758"
-  integrity sha512-ewchdETAGd32xLGLK93NETEGkRcePtN7ZwjmLSQnNW1Zd0SRUYE8NqftjamPyfKvK0i2DZjX4YAghGZTqaRUbA==
-  dependencies:
-    prop-types "^15.6.1"
-    react-native-animatable "^1.2.4"
-
 react-native-phone-input@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/react-native-phone-input/-/react-native-phone-input-0.2.1.tgz#ac6852a1ea37d8d58ff83ded52d18d7b6303e667"
@@ -6015,6 +6000,11 @@ react-native-phone-input@^0.2.1:
     google-libphonenumber "^2.0.9"
     lodash "^4.17.4"
     prop-types "^15.5.10"
+
+react-native-popup-menu@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.14.0.tgz#8a11e4a78f76f5883fa5eb9d736f0ec2df8765ce"
+  integrity sha1-ihHkp4929Yg/peudc28Owt+HZc4=
 
 react-native-reanimated@1.0.0-alpha.6:
   version "1.0.0-alpha.6"

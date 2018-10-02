@@ -10,23 +10,23 @@ import {
   StatusBar,
   Keyboard,
   Platform,
+  Clipboard,
 } from 'react-native';
-import { Card, Text, Textarea, Form, Label, Icon, Button } from 'native-base';
+import { Card, Text, Textarea, Form, Label, Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import PhoneInput from 'react-native-phone-input';
+import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import ModalPickerImage from '@components/ModalPickerImage';
-import Modal from 'react-native-modal';
-import { urlReport, appVersion, whatsappApi } from '@constants/config';
+import { urlReport, whatsappApi } from '@constants/config';
 import colors from '@constants/colors';
 import DismissKeyboard from '@components/utils/DismissKeyboard';
+import TouchableItem from '@components/utils/TouchableItem';
 
 const { width } = Dimensions.get('window');
 
 export default class Main extends Component {
   componentDidMount() {
-    this.setState({
-      pickerData: this.phone.getPickerData(),
-    });
+    this.setState({ pickerData: this.phone.getPickerData() });
   }
 
   onPressFlag() {
@@ -43,7 +43,6 @@ export default class Main extends Component {
       message: '',
       pickerData: null,
       notelp: '',
-      popAbout: false,
       popMenu: false,
       keyboardUp: false,
     };
@@ -66,27 +65,28 @@ export default class Main extends Component {
   }
 
   keyboardDidShow() {
-    this.setState({
-      keyboardUp: true,
-    });
+    this.setState({ keyboardUp: true });
   }
 
   keyboardDidHide() {
-    this.setState({
-      keyboardUp: false,
-    });
+    this.setState({ keyboardUp: false });
   }
 
   changePhoneNumber = notelp => {
-    this.setState({
-      notelp,
-    });
+    this.setState({ notelp });
   };
 
   changeMessage = message => {
-    this.setState({
-      message,
-    });
+    this.setState({ message });
+  };
+
+  shareMessage = () => {
+    const { message, notelp } = this.state;
+    const dataMessage = encodeURI(message);
+    const no = notelp.substr(1);
+
+    Clipboard.setString(`${whatsappApi}${no}/?text=${dataMessage}`);
+    setTimeout(() => alert('Whatsapp link copied!'), 300);
   };
 
   sendMessage = () => {
@@ -98,156 +98,144 @@ export default class Main extends Component {
   };
 
   openMenu = () => {
-    this.setState({
-      popMenu: !this.state.popMenu,
-    });
+    this.setState({ popMenu: !this.state.popMenu });
   };
 
   render() {
     return (
-      <DismissKeyboard>
-        <View style={{ flex: 1 }}>
-          <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
-          <View style={styles.header}>
-            <TouchableOpacity onPress={this.openMenu}>
-              <Icon
-                style={{ color: colors.blackTertiary }}
-                name="dots-vertical"
-                type={`MaterialCommunityIcons`}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.container}>
-            <Image source={require(`../assets/logo.png`)} style={styles.logo} />
-            <Card style={styles.cardStyle}>
-              <View style={styles.formNumber}>
-                <PhoneInput
-                  initialCountry={`id`}
-                  ref={ref => {
-                    this.phone = ref;
-                  }}
-                  onChangePhoneNumber={this.changePhoneNumber}
-                  value={this.state.notelp}
-                  textStyle={{ color: colors.blackPrimary, fontFamily: 'Roboto-Bold' }}
-                />
-              </View>
-            </Card>
-            <Card style={styles.cardStyle}>
-              <Form style={styles.formStyle}>
-                <Label style={{ color: '#fff' }}>Alamat</Label>
-                <Textarea
-                  rowSpan={5}
-                  style={styles.textInput}
-                  placeholderTextColor={colors.blackTertiary}
-                  value={this.state.message}
-                  onChangeText={this.changeMessage}
-                  placeholder="Write a message..."
-                />
-              </Form>
-            </Card>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity onPress={this.sendMessage}>
-                <LinearGradient
-                  start={{ x: 1, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  colors={[colors.lightOrange, colors.orange]}
-                  style={styles.buttonCircle}>
-                  <Ionicons name="md-share-alt" size={28} color={colors.white} />
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.sendMessage}>
-                <LinearGradient
-                  start={{ x: 1, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  colors={[colors.yellow, colors.green]}
-                  style={styles.buttonStyle}>
-                  <Text style={styles.buttonText}>Send</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-            <ModalPickerImage
-              ref={ref => {
-                this.myCountryPicker = ref;
-              }}
-              data={this.state.pickerData}
-              onChange={country => {
-                this.selectCountry(country);
-              }}
-              cancelText="Cancel"
-            />
-          </View>
-          <Modal
-            isVisible={this.state.popMenu}
-            animationIn={'slideInLeft'}
-            animationOut={'slideOutRight'}>
-            <View style={styles.contentModal}>
-              <Text style={styles.itemTitlePop}>Menu</Text>
-              <View style={styles.btnWrapper}>
-                <Button
-                  rounded
-                  style={styles.btnReport}
-                  onPress={() => {
-                    this.setState({ popMenu: !this.state.popMenu });
-                    Linking.openURL(urlReport);
-                  }}
-                  iconLeft>
-                  <Icon type={`MaterialIcons`} active name="report" />
-                  <Text>Kirim kritik / saran</Text>
-                </Button>
-                <Button
-                  rounded
-                  style={styles.btnAbout}
-                  onPress={() => {
-                    this.setState({
-                      popMenu: !this.state.popMenu,
-                      popAbout: !this.state.popAbout,
-                    });
-                  }}
-                  iconLeft>
-                  <Icon type={`MaterialIcons`} active name="info-outline" />
-                  <Text>Tentang Whatscut</Text>
-                </Button>
-                <Button
-                  rounded
-                  style={styles.btnClose}
-                  onPress={() =>
-                    this.setState({
-                      popMenu: !this.state.popMenu,
-                    })
-                  }
-                  iconLeft>
-                  <Icon type={`MaterialIcons`} active name="close" />
-                  <Text>Tutup</Text>
-                </Button>
-              </View>
-            </View>
-          </Modal>
-          <Modal
-            isVisible={this.state.popAbout}
-            animationIn={'slideInLeft'}
-            animationOut={'slideOutRight'}>
-            <View style={styles.contentModal}>
-              <Text style={styles.textTitle}>Tentang</Text>
-              <Image source={require(`../assets/icon.png`)} style={styles.iconAbout} />
-              <Text style={styles.textNameApp}>Whatscut</Text>
-              <Text style={styles.textVersion}>Version {appVersion}</Text>
-              <Text style={styles.textBrand}>1001 Digital Products</Text>
-              <Button
-                rounded
-                style={styles.btnClose}
-                onPress={() =>
+      <MenuProvider style={{ flex: 1 }}>
+        <DismissKeyboard>
+          <View style={{ flex: 1 }}>
+            <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
+
+            <View style={styles.header}>
+              <Menu
+                opened={this.state.popMenu}
+                onBackdropPress={() =>
                   this.setState({
-                    popAbout: !this.state.popAbout,
+                    popMenu: false,
                   })
-                }
-                iconLeft>
-                <Icon type={`MaterialIcons`} active name="close" />
-                <Text>Tutup</Text>
-              </Button>
+                }>
+                <MenuTrigger style={{ borderRadius: 50, borderWidth: 0 }}>
+                  <TouchableItem
+                    accessibilityComponentType="button"
+                    accessibilityTraits="button"
+                    testID="header-back"
+                    delayPressIn={0}
+                    style={{
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      backgroundColor: 'transparent',
+                      width: 50,
+                      height: 50,
+                      justifyContent: 'center',
+                    }}
+                    borderless
+                    onPress={this.openMenu}>
+                    <Icon
+                      style={{ color: colors.blackTertiary }}
+                      name="dots-vertical"
+                      type={`MaterialCommunityIcons`}
+                    />
+                  </TouchableItem>
+                </MenuTrigger>
+                <MenuOptions style={{ padding: 10 }}>
+                  <MenuOption
+                    style={{ flexDirection: 'row', alignItems: 'center' }}
+                    onSelect={() => {
+                      this.setState({ popMenu: !this.state.popMenu });
+                      Linking.openURL(urlReport);
+                    }}>
+                    <Ionicons
+                      name="md-information-circle"
+                      style={{ marginRight: 15 }}
+                      size={20}
+                      color={colors.blackTertiary}
+                    />
+                    <Text style={styles.textMenu}>Send Report</Text>
+                  </MenuOption>
+                  <MenuOption
+                    style={{ flexDirection: 'row', alignItems: 'center' }}
+                    onSelect={() => {
+                      this.setState({ popMenu: !this.state.popMenu });
+                      Linking.openURL(urlReport);
+                    }}>
+                    <Ionicons
+                      name="md-information-circle"
+                      style={{ marginRight: 15 }}
+                      size={20}
+                      color={colors.blackTertiary}
+                    />
+                    <Text style={styles.textMenu}>About WhatsCut</Text>
+                  </MenuOption>
+                </MenuOptions>
+              </Menu>
             </View>
-          </Modal>
-        </View>
-      </DismissKeyboard>
+
+            <View style={styles.container}>
+              {!this.state.keyboardUp && (
+                <Image source={require(`../assets/logo.png`)} style={styles.logo} />
+              )}
+              <Card style={styles.cardStyle}>
+                <View style={styles.formNumber}>
+                  <PhoneInput
+                    initialCountry={`id`}
+                    ref={ref => {
+                      this.phone = ref;
+                    }}
+                    onChangePhoneNumber={this.changePhoneNumber}
+                    value={this.state.notelp}
+                    textStyle={{ color: colors.blackPrimary, fontFamily: 'Roboto-Bold' }}
+                  />
+                </View>
+              </Card>
+              <Card style={styles.cardStyle}>
+                <Form style={styles.formStyle}>
+                  <Label style={{ color: '#fff' }}>Alamat</Label>
+                  <Textarea
+                    rowSpan={5}
+                    style={styles.textInput}
+                    placeholderTextColor={colors.blackTertiary}
+                    value={this.state.message}
+                    onChangeText={this.changeMessage}
+                    placeholder="Write a message..."
+                  />
+                </Form>
+              </Card>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity onPress={this.shareMessage}>
+                  <LinearGradient
+                    start={{ x: 1, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    colors={[colors.lightOrange, colors.orange]}
+                    style={styles.buttonCircle}>
+                    <Ionicons name="md-share-alt" size={28} color={colors.white} />
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.sendMessage}>
+                  <LinearGradient
+                    start={{ x: 1, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    colors={[colors.yellow, colors.green]}
+                    style={styles.buttonStyle}>
+                    <Text style={styles.buttonText}>Send</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+              <ModalPickerImage
+                ref={ref => {
+                  this.myCountryPicker = ref;
+                }}
+                data={this.state.pickerData}
+                onChange={country => {
+                  this.selectCountry(country);
+                }}
+                cancelText="Cancel"
+              />
+            </View>
+          </View>
+        </DismissKeyboard>
+      </MenuProvider>
     );
   }
 }
@@ -319,52 +307,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     fontSize: 20,
   },
-  //MODAL STYLE
-  contentModal: {
-    backgroundColor: 'white',
-    padding: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 4,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  itemTitlePop: {
-    fontSize: 22,
-    marginBottom: 20,
-    color: '#338a3e',
-    fontWeight: 'bold',
-  },
-  btnWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    justifyContent: 'space-between',
-  },
-  btnClose: {
-    width: '100%',
-    marginBottom: 5,
-    display: 'flex',
-    justifyContent: 'flex-start',
-    backgroundColor: '#338a3e',
-  },
-  btnReport: {
-    width: '100%',
-    marginBottom: 10,
-    justifyContent: 'flex-start',
-    backgroundColor: '#338a3e',
-  },
-  btnAbout: {
-    width: '100%',
-    marginBottom: 10,
-    justifyContent: 'flex-start',
-    backgroundColor: '#338a3e',
-  },
-  //MODAL ABOUT
-  textTitle: {
-    fontSize: 22,
-    textAlign: 'center',
-    color: '#338a3e',
-    fontWeight: 'bold',
+  textMenu: {
+    color: colors.blackTertiary,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 17,
   },
   logo: {
     width: 100,
@@ -372,36 +318,9 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
     marginBottom: 50,
   },
-  iconAbout: {
-    height: 110,
-    width: 110,
-    marginTop: 5,
-    marginBottom: 5,
-  },
   textInput: {
     fontFamily: 'Roboto-Medium',
     fontSize: 17,
     color: colors.blackPrimary,
-  },
-  textNameApp: {
-    fontSize: 18,
-    fontFamily: 'Roboto-Bold',
-    textAlign: 'center',
-    color: '#338a3e',
-  },
-  textVersion: {
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    textAlign: 'center',
-    marginBottom: 10,
-    color: '#798488',
-  },
-  textBrand: {
-    fontSize: 16,
-    fontFamily: 'Roboto-Medium',
-    textAlign: 'center',
-    marginTop: 20,
-    marginBottom: 10,
-    color: '#798488',
   },
 });
