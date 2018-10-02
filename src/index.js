@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import WithFonts from '@components/utils/WithFonts';
-import Main from './Main';
+import Routes from './routes';
 
 export default class App extends Component {
   render() {
-    return <WithFonts render={() => <Main />} />;
+    return <WithFonts render={() => <Routes />} />;
   }
 }

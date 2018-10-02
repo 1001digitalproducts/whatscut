@@ -1,3 +1,7 @@
+/**
+ * @flow
+ */
+import type { NavigationScreenProp } from 'react-navigation';
 import { LinearGradient } from 'expo';
 import React, { Component } from 'react';
 import {
@@ -21,10 +25,17 @@ import { urlReport, whatsappApi } from '@constants/config';
 import colors from '@constants/colors';
 import DismissKeyboard from '@components/utils/DismissKeyboard';
 import TouchableItem from '@components/utils/TouchableItem';
+import { WHATSCUT_LOGO } from '@constants/assets';
 
 const { width } = Dimensions.get('window');
 
-export default class Main extends Component {
+type Props = {
+  navigation: NavigationScreenProp<*>,
+  dispatch: () => {},
+};
+
+export default class Main extends Component<Props> {
+  static navigationOptions = { header: null };
   componentDidMount() {
     this.setState({ pickerData: this.phone.getPickerData() });
   }
@@ -39,13 +50,7 @@ export default class Main extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      message: '',
-      pickerData: null,
-      notelp: '',
-      popMenu: false,
-      keyboardUp: false,
-    };
+    this.state = { message: '', pickerData: null, notelp: '', popMenu: false, keyboardUp: false };
   }
 
   componentWillMount() {
@@ -102,6 +107,7 @@ export default class Main extends Component {
   };
 
   render() {
+    const { navigation } = this.props;
     return (
       <MenuProvider style={{ flex: 1 }}>
         <DismissKeyboard>
@@ -158,7 +164,7 @@ export default class Main extends Component {
                     style={{ flexDirection: 'row', alignItems: 'center' }}
                     onSelect={() => {
                       this.setState({ popMenu: !this.state.popMenu });
-                      Linking.openURL(urlReport);
+                      navigation.navigate('About');
                     }}>
                     <Ionicons
                       name="md-information-circle"
@@ -173,9 +179,7 @@ export default class Main extends Component {
             </View>
 
             <View style={styles.container}>
-              {!this.state.keyboardUp && (
-                <Image source={require(`../assets/logo.png`)} style={styles.logo} />
-              )}
+              {!this.state.keyboardUp && <Image source={WHATSCUT_LOGO} style={styles.logo} />}
               <Card style={styles.cardStyle}>
                 <View style={styles.formNumber}>
                   <PhoneInput
@@ -243,7 +247,7 @@ export default class Main extends Component {
 const styles = StyleSheet.create({
   header: {
     display: 'flex',
-    backgroundColor: colors.transparent,
+    backgroundColor: colors.white,
     flexDirection: 'row-reverse',
     padding: 10,
   },
