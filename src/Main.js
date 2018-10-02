@@ -193,7 +193,7 @@ export default class Main extends Component {
                 <Form style={styles.formStyle}>
                   <Label style={{ color: '#fff' }}>Alamat</Label>
                   <Textarea
-                    rowSpan={5}
+                    rowSpan={6}
                     style={styles.textInput}
                     placeholderTextColor={colors.blackTertiary}
                     value={this.state.message}
