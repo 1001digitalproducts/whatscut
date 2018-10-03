@@ -16,8 +16,9 @@ import {
   Platform,
   Clipboard,
 } from 'react-native';
+import isEmpty from 'lodash.isempty';
 import { Card, Text, Textarea, Form, Label, Icon } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import PhoneInput from 'react-native-phone-input';
 import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import ModalPickerImage from '@components/ModalPickerImage';
@@ -85,12 +86,16 @@ export default class Main extends Component<Props> {
     this.setState({ message });
   };
 
-  shareMessage = () => {
+  copyMessage = () => {
     const { message, notelp } = this.state;
     const dataMessage = encodeURI(message);
     const no = notelp.substr(1);
+    let waUri = `${whatsappApi}${no}`;
+    if (!isEmpty(message)) {
+      waUri = `${waUri}/?text=${dataMessage}`;
+    }
 
-    Clipboard.setString(`${whatsappApi}${no}/?text=${dataMessage}`);
+    Clipboard.setString(waUri);
     setTimeout(() => alert('Whatsapp link copied!'), 300);
   };
 
@@ -98,8 +103,13 @@ export default class Main extends Component<Props> {
     const { message, notelp } = this.state;
     const dataMessage = encodeURI(message);
     const no = notelp.substr(1);
+    let waUri = `${whatsappApi}${no}`;
+    if (!isEmpty(message)) {
+      waUri = `${waUri}/?text=${dataMessage}`;
+    }
 
-    Linking.openURL(`${whatsappApi}${no}/?text=${dataMessage}`);
+    Clipboard.setString(waUri);
+    Linking.openURL(waUri);
   };
 
   openMenu = () => {
@@ -207,13 +217,13 @@ export default class Main extends Component<Props> {
                 </Form>
               </Card>
               <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity onPress={this.shareMessage}>
+                <TouchableOpacity onPress={this.copyMessage}>
                   <LinearGradient
                     start={{ x: 1, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     colors={[colors.lightOrange, colors.orange]}
                     style={styles.buttonCircle}>
-                    <Ionicons name="md-share-alt" size={28} color={colors.white} />
+                    <MaterialIcons name="content-copy" size={28} color={colors.white} />
                   </LinearGradient>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.sendMessage}>
