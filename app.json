@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "WhatsCut",
-    "description": "This project is really great.",
+    "description": "A tool to send WhatsApp without save the number",
     "slug": "WhatsCut",
     "privacy": "public",
     "sdkVersion": "30.0.0",
@@ -25,7 +25,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.awancoder.dp.whatscut"
+    },
+    "android": {
+      "package": "com.awancoder.dp.whatscut"
     }
   }
 }
