@@ -15,6 +15,7 @@ import {
   Keyboard,
   Platform,
   Clipboard,
+  Alert,
 } from 'react-native';
 import isEmpty from 'lodash.isempty';
 import { Card, Text, Textarea, Form, Label, Icon } from 'native-base';
@@ -96,7 +97,7 @@ export default class Main extends Component<Props> {
     }
 
     Clipboard.setString(waUri);
-    setTimeout(() => alert('Whatsapp link copied!'), 300);
+    setTimeout(() => Alert.alert('Whatsapp link copied!', waUri), 300);
   };
 
   sendMessage = () => {
