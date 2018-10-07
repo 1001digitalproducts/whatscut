@@ -1,12 +1,12 @@
 {
   "expo": {
     "name": "WhatsCut",
-    "description": "A tool to send WhatsApp without save the number",
+    "description": "A tool to send WhatsApp without need to save the number",
     "slug": "WhatsCut",
     "privacy": "public",
     "sdkVersion": "30.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
