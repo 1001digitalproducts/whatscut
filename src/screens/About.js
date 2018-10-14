@@ -4,6 +4,7 @@ import { responsiveWidth as wx, responsiveHeight as hx } from 'react-native-resp
 import { WHATSCUT_LOGO } from '@constants/assets';
 import { appVersion } from '@constants/config';
 import colors from '@constants/colors';
+import px from '@constants/pixel';
 
 class About extends React.PureComponent {
   static navigationOptions = {
@@ -22,15 +23,19 @@ class About extends React.PureComponent {
         <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <View style={{ justifyContent: 'center', flex: 1 }}>
           <Image
-            style={{ width: wx(30), height: hx(25), resizeMode: 'contain' }}
+            style={{
+              width: wx(22.5),
+              height: hx(18),
+              resizeMode: 'contain',
+            }}
             source={WHATSCUT_LOGO}
           />
           <Text
             style={{
               color: colors.blackTertiary,
               fontFamily: 'Roboto-Medium',
-              fontSize: 17,
-              paddingVertical: 10,
+              fontSize: px(17),
+              paddingVertical: hx(1),
               textAlign: 'center',
             }}>
             Version {appVersion}
@@ -40,7 +45,7 @@ class About extends React.PureComponent {
           style={{
             color: colors.blackTertiary,
             fontFamily: 'Roboto-Medium',
-            fontSize: 17,
+            fontSize: px(17),
             position: 'absolute',
             bottom: hx(5),
           }}>

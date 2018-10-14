@@ -7,7 +7,6 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Dimensions,
   TouchableOpacity,
   Linking,
   Image,
@@ -17,6 +16,7 @@ import {
   Clipboard,
   Alert,
 } from 'react-native';
+import { responsiveWidth as wx, responsiveHeight as hx } from 'react-native-responsive-dimensions';
 import isEmpty from 'lodash.isempty';
 import { Card, Text, Textarea, Form, Label, Icon } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -28,8 +28,7 @@ import colors from '@constants/colors';
 import DismissKeyboard from '@components/utils/DismissKeyboard';
 import TouchableItem from '@components/utils/TouchableItem';
 import { WHATSCUT_LOGO } from '@constants/assets';
-
-const { width } = Dimensions.get('window');
+import px from '@constants/pixel';
 
 type Props = {
   navigation: NavigationScreenProp<*>,
@@ -133,7 +132,7 @@ export default class Main extends Component<Props> {
                     popMenu: false,
                   })
                 }>
-                <MenuTrigger style={{ borderRadius: 50, borderWidth: 0 }}>
+                <MenuTrigger style={{ borderRadius: px(40), borderWidth: 0 }}>
                   <TouchableItem
                     accessibilityComponentType="button"
                     accessibilityTraits="button"
@@ -143,8 +142,8 @@ export default class Main extends Component<Props> {
                       alignItems: 'center',
                       flexDirection: 'row',
                       backgroundColor: 'transparent',
-                      width: 50,
-                      height: 50,
+                      width: wx(11),
+                      height: hx(6),
                       justifyContent: 'center',
                     }}
                     borderless
@@ -156,7 +155,7 @@ export default class Main extends Component<Props> {
                     />
                   </TouchableItem>
                 </MenuTrigger>
-                <MenuOptions style={{ padding: 10 }}>
+                <MenuOptions style={{ padding: px(10) }}>
                   <MenuOption
                     style={{ flexDirection: 'row', alignItems: 'center' }}
                     onSelect={() => {
@@ -165,8 +164,8 @@ export default class Main extends Component<Props> {
                     }}>
                     <Ionicons
                       name="md-information-circle"
-                      style={{ marginRight: 15 }}
-                      size={20}
+                      style={{ marginRight: wx(4.1) }}
+                      size={px(20)}
                       color={colors.blackTertiary}
                     />
                     <Text style={styles.textMenu}>Send Report</Text>
@@ -179,8 +178,8 @@ export default class Main extends Component<Props> {
                     }}>
                     <Ionicons
                       name="md-information-circle"
-                      style={{ marginRight: 15 }}
-                      size={20}
+                      style={{ marginRight: wx(4.1) }}
+                      size={px(20)}
                       color={colors.blackTertiary}
                     />
                     <Text style={styles.textMenu}>About WhatsCut</Text>
@@ -224,7 +223,12 @@ export default class Main extends Component<Props> {
                     end={{ x: 1, y: 1 }}
                     colors={[colors.lightOrange, colors.orange]}
                     style={styles.buttonCircle}>
-                    <MaterialIcons name="content-copy" size={28} color={colors.white} />
+                    <MaterialIcons
+                      name="content-copy"
+                      size={px(26)}
+                      style={{ alignSelf: 'center' }}
+                      color={colors.white}
+                    />
                   </LinearGradient>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.sendMessage}>
@@ -260,7 +264,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     backgroundColor: colors.white,
     flexDirection: 'row-reverse',
-    padding: 10,
+    paddingVertical: hx(1),
+    paddingHorizontal: wx(3),
   },
   container: {
     flex: 1,
@@ -269,48 +274,46 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   cardStyle: {
-    marginBottom: 15,
-    borderRadius: 25,
-    width: width - 80,
+    marginBottom: hx(1.5),
+    borderRadius: px(25),
+    width: wx(80),
     backgroundColor: colors.white,
   },
   formStyle: {
     alignSelf: 'center',
     width: '90%',
-    marginBottom: 5,
+    marginBottom: hx(0.75),
     backgroundColor: colors.white,
-    borderRadius: 4,
-    height: 200,
+    borderRadius: px(4),
+    height: hx(30.3),
     opacity: 0.75,
   },
   formNumber: {
     alignSelf: 'center',
+    justifyContent: 'center',
     width: '90%',
-    marginVertical: 10,
     backgroundColor: colors.white,
-    borderRadius: 4,
-    height: 30,
-    padding: 5,
+    borderRadius: px(4),
+    height: hx(6),
+    padding: px(5),
     opacity: 0.75,
   },
   buttonCircle: {
-    marginVertical: 5,
-    paddingVertical: 10,
-    borderRadius: 50,
-    width: 50,
-    height: 50,
+    marginVertical: hx(0.75),
+    borderRadius: px(40),
+    width: wx(11),
+    height: hx(6),
     display: 'flex',
     justifyContent: 'center',
     alignSelf: 'center',
     flexDirection: 'row',
-    marginRight: 25,
+    marginRight: wx(4.1),
   },
   buttonStyle: {
-    marginVertical: 5,
-    paddingVertical: 10,
-    borderRadius: 50,
-    width: width / 3,
-    height: 50,
+    marginVertical: hx(0.75),
+    borderRadius: px(40),
+    width: wx(30),
+    height: hx(6),
     display: 'flex',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -320,22 +323,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.white,
     fontFamily: 'Roboto-Bold',
-    fontSize: 20,
+    alignSelf: 'center',
+    fontSize: px(20),
   },
   textMenu: {
     color: colors.blackTertiary,
     fontFamily: 'Roboto-Medium',
-    fontSize: 17,
+    fontSize: px(17),
   },
   logo: {
-    width: 100,
-    height: 140,
+    width: wx(22.5),
+    height: hx(18),
     resizeMode: 'stretch',
-    marginBottom: 50,
+    marginBottom: hx(5),
   },
   textInput: {
     fontFamily: 'Roboto-Medium',
-    fontSize: 17,
+    fontSize: px(17),
     color: colors.blackPrimary,
   },
 });

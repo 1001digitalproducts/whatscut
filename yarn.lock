@@ -6073,10 +6073,10 @@ react-native-reanimated@1.0.0-alpha.6:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.0-alpha.6.tgz#169d23b3b39d1c88e509ddc97027b1c8cc066da8"
   integrity sha512-0D99kvdFZCJMMIMd0ThosAWlOhDCPDuhMxLijWE0/ZBhGCknvihg0R5jEyv9spxXyvgjKhUE+aLm27XV+1eLhQ==
 
-react-native-responsive-dimensions@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-responsive-dimensions/-/react-native-responsive-dimensions-1.0.2.tgz#521551fa90548f888578eafd71101d19061727ac"
-  integrity sha512-hnGvlMcJ4XIZv6TTyFKdZ9o8jaWCADpKJMW/hMvYjCn1S0FNIm4GiH4hMcM4Z9c/2gwLwzkyQjTVAuN29R83YA==
+react-native-responsive-dimensions@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-dimensions/-/react-native-responsive-dimensions-2.0.1.tgz#64e2064d7e9a2506f10ab7fa7422e8aa64c41d6b"
+  integrity sha512-fVSJEfwR353IvNSLtwwv7asAU4BAqd/wXQWeiyKyasn5pqpn/X0w0u7Tc0QWwsQch8lywz3npMjMThXgXkptuQ==
 
 react-native-safe-area-view@0.11.0:
   version "0.11.0"
