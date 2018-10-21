@@ -29,7 +29,9 @@
       "bundleIdentifier": "com.awancoder.dp.whatscut"
     },
     "android": {
-      "package": "com.awancoder.dp.whatscut"
+      "package": "com.awancoder.dp.whatscut",
+      "versionCode": 2,
     }
+
   }
 }
